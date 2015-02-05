@@ -1,36 +1,51 @@
 <?php defined('SYSPATH') or die('No direct script access.');
 
-// Simple blog controller
-// The application lacks many features, such as authentication or comments
-class Controller_Page extends Controller//_Template
+class Controller_Page extends Controller
 {
-	private function _redirect_to_home()
+
+	private $lang, $langsel_offer;
+
+	public function before()
 	{
-		$this->redirect('page/list');
+		//langsel //raw cookiec, becouse javascript wouldn't be able to modify them - this is sad ;-;
+		global $lang, $langsel_offer;
+		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2); //$this->request->accept_lang();//ret of that "smart" function is like: array(4) { ["pl-PL"]=> float(1) ["pl"]=> float(0.8) ["en-US"]=> float(0.6) ["en"]=> float(0.4) }
+
+		if ( ($lang != "en") && ($lang != "pl") ) { $lang="en"; $langsel_offer = true; } else { $langsel_offer = false; }
+		if ( isset($_COOKIE['langsel']) ) { $lang=$_COOKIE['langsel']; $langsel_offer=false; }
 	}
 	public function after()
 	{
 		
 	}
+	
 
 	public function action_show()
 	{
 		$id = $this->request->param('id');
 		$url= $this->request->param('url');
 
+		global $lang, $langsel_offer;
+
 		if (!isset($id))
-			$page = ORM::factory('Page', array('url'=>$url));
+			$page = ORM::factory('Page', array('url'=>$url, 'lang'=>$lang));
 		else
-			$page = ORM::factory('Page', array('id'=>$id));
+			$page = ORM::factory('Page', array('id'=>$id,   'lang'=>$lang));
 		
-		if (! $page->published)
-throw HTTP_Exception::factory(404, 'File not found!');//throw new HTTP_Exception_404();
+		if ((!$page->published) || ($page===null))
+		{
+			$page = ORM::factory('Page', array('url'=>'_error404', 'lang'=>$lang));
+			//throw HTTP_Exception::factory(404, 'File not found!');
+			$this->request->status = 404; //seems not to work
+		}
 
 		$view = View::factory('page/show');
+		$view->langsel_offer = $langsel_offer;
 		$view->page = $page;
-		$view->section_header = ORM::factory('Region', array('region'=>'header'))->body;
-		$view->section_footer = ORM::factory('Region', array('region'=>'footer'))->body;
-		$view->top_menus      = ORM::factory('Topmenu')->find_all();
+		$view->section_header = ORM::factory('Region', array('region'=>'header', 'lang'=>$lang))->body;
+		$view->section_footer = ORM::factory('Region', array('region'=>'footer', 'lang'=>$lang))->body;
+		$view->top_menus      = ORM::factory('Topmenu')->where('lang', '=', $lang)->find_all();
+		$view->page_name      = ORM::factory('Config', array('name' => 'page_name'))->value;
 		$this->response->body($view);
 	}
 	
@@ -44,12 +59,10 @@ throw HTTP_Exception::factory(404, 'File not found!');//throw new HTTP_Exception
 	
 	public function action_delete()
 	{
-		// id is our parameter specified in the route table
-		// see bootstrap.php for reference
 		$id = $this->request->param('id');
 		ORM::factory('Page', $id)->delete();
 		
-		$this->_redirect_to_home();
+		$this->redirect('page/list');
 	}
 	
 	public function action_edit()
@@ -59,12 +72,10 @@ throw HTTP_Exception::factory(404, 'File not found!');//throw new HTTP_Exception
 		
 		if($this->request->method() == 'POST')
 		{
-			// Copy data from the form to the model and save to database
 			$page->values($_POST);
 			$page->save();
 			
-			$this->_redirect_to_home();
-			return;
+			$this->redirect('page/list');
 		}
 		
 		$view = View::factory('page/edit');
@@ -72,5 +83,4 @@ throw HTTP_Exception::factory(404, 'File not found!');//throw new HTTP_Exception
 		
 		$this->response->body($view);
 	}
-
-} // End Welcome
+}
