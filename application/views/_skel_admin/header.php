@@ -25,6 +25,51 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
+  <link rel="stylesheet" href="/files/Trumbowyg/ui/trumbowyg.css">
+  <script src="/files/Trumbowyg/trumbowyg.min.js"></script>
+  <script src="/files/Trumbowyg/plugins/colors/trumbowyg.colors.min.js"></script>
+  <script src="/files/Trumbowyg/plugins/base64/trumbowyg.base64.min.js"></script>
+  <!--<script src="/files/Trumbowyg/plugins/upload/trumbowyg.upload.min.js"></script>-->
+
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $('textarea').trumbowyg({
+      lang: 'pl',
+      fixedBtnPane: true,
+      semantic: true,
+      btnsDef: {
+          // Customizables dropdowns
+          align: {
+              dropdown: ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+              ico: 'justifyLeft'
+          },
+          image: {
+              dropdown: ['insertImage', 'upload', 'base64'],
+              ico: 'insertImage'
+          }
+      },
+      btns: [
+        'viewHTML',
+        '|', 'bold', 'italic', '|', 'link',
+        '|', 'formatting',
+        //'|', 'btnGrp-test',
+        '|', 'align',
+        '|', 'btnGrp-lists',
+        '|', 'image']
+    });
+  });
+  </script>
+
+  <style>
+    table#list{
+      border: 1px solid black;
+    }
+    table#list td, table#list th{
+      padding: 5px;
+      border: 1px solid black;
+    }
+  </style>
+
   <title>admin pages</title>
   <style>
       body {
