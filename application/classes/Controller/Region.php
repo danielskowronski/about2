@@ -2,7 +2,6 @@
 
 class Controller_Region extends Controller
 {
-
 	public function before()
 	{
 		if ( ! Auth::instance()->logged_in())
@@ -10,10 +9,6 @@ class Controller_Region extends Controller
 			$this->redirect('auth/login');
 			return;
 		}
-	}
-	public function after()
-	{
-		
 	}
 	
 	public function action_list()

@@ -2,14 +2,6 @@
 
 class Controller_Auth extends Controller
 {
-	public function before()
-	{
-		/*if ( ! Auth::instance()->logged_in())
-		{
-			$this->redirect('auth/login');
-			return;
-		}*/
-	}
 	public function action_index()
 	{
 		if (Auth::instance()->logged_in())

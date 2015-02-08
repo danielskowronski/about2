@@ -2,23 +2,17 @@
 
 class Controller_Page extends Controller
 {
-
 	private $lang, $langsel_offer;
 
 	public function before()
 	{
-		//langsel //raw cookiec, becouse javascript wouldn't be able to modify them - this is sad ;-;
+		//langsel //raw cookie, becouse javascript wouldn't be able to modify them - this is sad ;-;
 		global $lang, $langsel_offer;
 		$lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2); //$this->request->accept_lang();//ret of that "smart" function is like: array(4) { ["pl-PL"]=> float(1) ["pl"]=> float(0.8) ["en-US"]=> float(0.6) ["en"]=> float(0.4) }
 
 		if ( ($lang != "en") && ($lang != "pl") ) { $lang="en"; $langsel_offer = true; } else { $langsel_offer = false; }
 		if ( isset($_COOKIE['langsel']) ) { $lang=$_COOKIE['langsel']; $langsel_offer=false; }
-	}
-	public function after()
-	{
-		
-	}
-	
+	}	
 
 	public function action_show()
 	{

@@ -98,6 +98,7 @@
       <ul class="nav navbar-nav">
         <li><a href="/auth">admin pages index</a></li>
         <li><a href="/page/list">pages</a></li>
+        <li><a href="/fileadm">files</a></li>
         <li><a href="/topmenu/list">top menu</a></li>
         <li><a href="/region/list">regions</a></li>
         <li><a href="/config/list">config</a></li>

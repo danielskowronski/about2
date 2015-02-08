@@ -22,7 +22,7 @@ else
  * @link http://kohanaframework.org/guide/using.configuration
  * @link http://www.php.net/manual/timezones
  */
-date_default_timezone_set('America/Chicago');
+date_default_timezone_set('Europe/Warsaw');
 
 /**
  * Set the default locale.
@@ -30,7 +30,7 @@ date_default_timezone_set('America/Chicago');
  * @link http://kohanaframework.org/guide/using.configuration
  * @link http://www.php.net/manual/function.setlocale
  */
-setlocale(LC_ALL, 'en_US.utf-8');
+setlocale(LC_ALL, 'pl_PL.utf-8');
 
 /**
  * Enable the Kohana auto-loader.
@@ -136,25 +136,22 @@ Kohana::modules(array(
  * Set the routes. Each route must have a minimum of a name, a URI and a set of
  * defaults for the URI.
  */
+Route::set('file-admin', 'fileadm(/<action>(/<id>))', array() )
+->defaults(array('controller' => 'file', 'action' => 'list' ));
+
+Route::set('file-view', 'files/<url>', array('url' => '[^/,;?]++'))
+->defaults(array('controller' => 'file', 'action' => 'show' ));
 
 Route::set('login', 'auth(/<action>)', array() )
-->defaults(array(
-  'controller' => 'auth',
-  'action'     => 'index',
-));
+->defaults(array('controller' => 'auth', 'action' => 'index' ));
 
-Route::set('default', '(<url>)', array() )
-->defaults(array(
-  'controller' => 'page',
-  'action'     => 'show',
-  'url'        => 'index',
-));
+Route::set('default', '(<url>)', array() ) //nice urls for pages
+->defaults(array('controller' => 'page',  'action' => 'show', 'url' => 'index' ));
 
-Route::set('pages', '(<controller>(/<action>(/<id>)))',
-	array('id' => '[0-9]+'))
-	->defaults(array(
-		'controller' => 'page',
-		'action'     => 'list',
-	));
+Route::set('pages', '(<controller>(/<action>(/<id>)))', array('id' => '[0-9]+'))
+->defaults(array('controller' => 'page', 'action' => 'list' ));
+
+Route::set('pages', '(<controller>(/<action>(/<name>)))', array('name' => '.+'))
+->defaults(array('controller' => 'page', 'action' => 'list' ));
 
 Cookie::$salt = '6b888c420245262058200c0a73b26a7b';

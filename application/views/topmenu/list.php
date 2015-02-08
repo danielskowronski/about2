@@ -10,7 +10,7 @@
 	<td><?php echo HTML::chars($topmenu->id); ?></td>
 	<td><?php echo HTML::chars($topmenu->title); ?></td>
 	<td><?php echo HTML::chars($topmenu->lang); ?></td>
-	<td><?php echo HTML::chars($topmenu->url); ?></td>
+	<td><a href="<?php echo HTML::chars($topmenu->url); ?>"><?php echo HTML::chars($topmenu->url); ?></a></td>
 	<td><?php echo ($topmenu->published ? "&#10004;" : "&#10008;"); ?> </td>
 	<td><?php echo ($topmenu->preview ? "&#10004;" : "&#10008;"); ?> </td>
 	<td><?php echo HTML::anchor('topmenu/edit/' . $topmenu->id, 'Edit'); ?></td>

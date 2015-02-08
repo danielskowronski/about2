@@ -2,7 +2,6 @@
 
 class Controller_Config extends Controller
 {
-
 	public function before()
 	{
 		if ( ! Auth::instance()->logged_in())
@@ -10,10 +9,6 @@ class Controller_Config extends Controller
 			$this->redirect('auth/login');
 			return;
 		}
-	}
-	public function after()
-	{
-		
 	}
 	
 	public function action_list()
@@ -24,18 +19,10 @@ class Controller_Config extends Controller
 		$this->response->body($view);
 	}
 	
-	public function action_delete()
-	{
-		$id = $this->request->param('id');
-		ORM::factory('Config', $id)->delete();
-		
-		$this->redirect('config/list');
-	}
-	
 	public function action_edit()
 	{
-		$id = $this->request->param('id');
-		$config = ORM::factory('Config', $id);
+		$name = $this->request->param('name');
+		$config = ORM::factory('Config', $name);
 		
 		if($this->request->method() == 'POST')
 		{
