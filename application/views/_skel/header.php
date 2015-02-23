@@ -35,7 +35,7 @@
         text-align: center;
       }
     </style>
-    <?php require_once(dirname(__FILE__)."/langsel.php"); ?>
+    <?php require(dirname(__FILE__)."/langsel.php"); ?>
 </head>
 <body>
 

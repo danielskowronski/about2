@@ -4,11 +4,7 @@ class Controller_Region extends Controller
 {
 	public function before()
 	{
-		if ( ! Auth::instance()->logged_in())
-		{
-			$this->redirect('auth/login');
-			return;
-		}
+		Helper_Auth::checkAuth($this);
 	}
 	
 	public function action_list()

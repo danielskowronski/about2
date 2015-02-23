@@ -4,11 +4,7 @@ class Controller_Config extends Controller
 {
 	public function before()
 	{
-		if ( ! Auth::instance()->logged_in())
-		{
-			$this->redirect('auth/login');
-			return;
-		}
+		Helper_Auth::checkAuth($this);
 	}
 	
 	public function action_list()
@@ -23,7 +19,7 @@ class Controller_Config extends Controller
 	{
 		$name = $this->request->param('name');
 		$config = ORM::factory('Config', $name);
-		
+
 		if($this->request->method() == 'POST')
 		{
 			$config->values($_POST);

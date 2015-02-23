@@ -151,7 +151,10 @@ Route::set('default', '(<url>)', array() ) //nice urls for pages
 Route::set('pages', '(<controller>(/<action>(/<id>)))', array('id' => '[0-9]+'))
 ->defaults(array('controller' => 'page', 'action' => 'list' ));
 
-Route::set('pages', '(<controller>(/<action>(/<name>)))', array('name' => '.+'))
-->defaults(array('controller' => 'page', 'action' => 'list' ));
+Route::set('config', 'config(/<action>(/<name>))', array('name' => '.+'))
+->defaults(array('controller' => 'config', 'action' => 'list' ));
+
+/*Route::set('pages', '(<controller>(/<action>(/<name>)))', array('name' => '.+'))
+->defaults(array('controller' => 'page', 'action' => 'list' ));*/
 
 Cookie::$salt = '6b888c420245262058200c0a73b26a7b';

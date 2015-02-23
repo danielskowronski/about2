@@ -2,18 +2,10 @@
 
 class Controller_File extends Controller
 {
-	public function checkAuth()
-	{
-		if ( ! Auth::instance()->logged_in())
-		{
-			$this->redirect('auth/login');
-			return;
-		}
-	}
-	
 	public function action_list()
 	{
-		$this->checkAuth();
+		Helper_Auth::checkAuth($this);
+
 		$view = View::factory('file/list');
 		$view->files = ORM::factory('File')->find_all();
 		
@@ -22,6 +14,8 @@ class Controller_File extends Controller
 	
 	public function action_delete()
 	{
+		Helper_Auth::checkAuth($this);
+
 		$id = $this->request->param('id');
 		ORM::factory('File', $id)->delete();
 		
@@ -33,14 +27,33 @@ class Controller_File extends Controller
 		$url= $this->request->param('url');
 		$file = ORM::factory('File', array('url'=>$url));
 		
-		$view = View::factory('file/show');
-		$view->file = $file;
-		$this->response->headers('Content-type',$file->contentType);
+		if ($file->title==null){
+			$lng  = Helper_Lang::checkLang(); 
+			$view = View::factory('page/show');
+			$page = ORM::factory('Page', array('url'=>'_error404', 'lang'=>$lng['lang']) );
+			//fixme: it's hack
+			$view->langsel_offer = $lng['offer'];
+			$view->page = $page;
+			$view->section_header = ORM::factory('Region', array('region'=>'header', 'lang'=>$lng['lang']))->body;
+			$view->section_footer = ORM::factory('Region', array('region'=>'footer', 'lang'=>$lng['lang']))->body;
+			$view->top_menus      = ORM::factory('Topmenu')->where('lang', '=', $lng['lang'])->find_all();
+			$view->page_name      = ORM::factory('Config', array('name' => 'page_name'))->value;
+			$this->response->body($view);
+			//set error response 404
+		}
+		else{
+			$view = View::factory('file/show');
+			$view->file = $file;
+			$this->response->headers('Content-type',$file->contentType);
+		}
+		
 		$this->response->body($view);
 	}
 	
 	public function action_edit()
 	{
+		Helper_Auth::checkAuth($this);
+
 		$id = $this->request->param('id');
 		$file = ORM::factory('File', $id);
 		$file->values(array("body"=>NULL));
