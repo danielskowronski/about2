@@ -23,14 +23,37 @@ class HTTP_Exception extends Kohana_HTTP_Exception
         }
         else
         {*/
-            // Generate a nicer looking "Oops" page.
-            $view = View::factory('errors/default');
-            $view->error = $this->getCode();
-            $response = Response::factory()
-                ->status($this->getCode())
-                ->body($view->render());
- 
-            return $response;
+            if ($this->getCode()=="404")
+            {
+                //resource not found - page "_error404" editable from admin panel
+                $lng = Helper_Lang::checkLang();
+                
+                $page = ORM::factory('Page', array('url'=>'_error404', 'lang'=>$lng['lang']));
+                
+                $view = View::factory('page/show');
+                $view->langsel_offer = $lng['offer'];
+                $view->page = $page;
+                $view->section_header = ORM::factory('Region', array('region'=>'header', 'lang'=>$lng['lang']))->body;
+                $view->section_footer = ORM::factory('Region', array('region'=>'footer', 'lang'=>$lng['lang']))->body;
+                $view->top_menus      = ORM::factory('Topmenu')->where('lang', '=', $lng['lang'])->find_all();
+                $view->page_name      = ORM::factory('Config', array('name' => 'page_name'))->value;
+                
+                $response = Response::factory()
+                    ->status($this->getCode())
+                    ->body($view->render());
+                return $response;
+            }
+            else
+            {
+                //generic error - for not really not found resources but rather unmapped actions etc.
+                $view = View::factory('errors/default');
+                $view->error = $this->getCode();
+                $response = Response::factory()
+                    ->status($this->getCode())
+                    ->body($view->render());
+     
+                return $response;
+            }
         /* }*/
     }
 }
