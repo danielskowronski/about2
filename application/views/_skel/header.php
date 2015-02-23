@@ -35,6 +35,7 @@
         text-align: center;
       }
     </style>
+    <link href='/files/style.css' rel='stylesheet' type='text/css'>
     <?php require(dirname(__FILE__)."/langsel.php"); ?>
 </head>
 <body>
