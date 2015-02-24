@@ -50,7 +50,7 @@ class Controller_Page extends Controller
 		Helper_Auth::checkAuth($this);
 
 		$id = $this->request->param('id');
-		ORM::factory('Page', $id)->find()->delete();
+		ORM::factory('Page', $id)->delete();
 		
 		$this->redirect('page/list');
 	}
