@@ -8,7 +8,8 @@
 <?php echo Form::input('title', $page->title, array('size'=>'64')); ?> <br/>
 
 <?php echo Form::label('body', "Body"); ?> <br/>
-<?php echo Form::textarea('body', $page->body); ?> <br/>
+<?php echo Form::textarea('body', $page->body); ?> 
+<button id="markAsRawButton" type="button" onClick="markAsRaw($('textarea'));$('#markAsRawButton').hide();return;">Make RAW HTML and kill WYSIWYG</button> <br /><br />
 
 <?php echo Form::label('url', "URL"); ?>
 <?php echo Form::input('url', $page->url, array('size'=>'32')); ?> <br/>

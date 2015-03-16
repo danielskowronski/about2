@@ -32,8 +32,22 @@
   <!--<script src="/files/Trumbowyg/plugins/upload/trumbowyg.upload.min.js"></script>-->
 
   <script type="text/javascript">
+  function isRawHtml(object){
+	var text = $(object).text();
+	
+	if (text.indexOf("<!-- RAW -->") >= 0) return true;
+	if (text.indexOf("<script") >= 0) return true;
+	if (text.indexOf("<style") >= 0) return true;
+	
+	return false;
+  }
+  function markAsRaw(object){
+	$(object).val( $(object).val() + "<!-- RAW -->" )
+	$(object).trumbowyg('destroy');
+  }
   $(document).ready(function(){
-    $('textarea').trumbowyg({
+	if ( isRawHtml($('textarea')) ) $('#markAsRawButton').hide();
+	else $('textarea').trumbowyg({
       lang: 'pl',
       fixedBtnPane: true,
       semantic: true,
